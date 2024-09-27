@@ -4,42 +4,47 @@ const Form = () => {
   const [topText, setTopText] = useState("");
   const [bottomText, setBottomText] = useState("");
   const [meme, setMeme] = useState(null);
-  const [textColor, setTextColor] = useState("white"); // State to hold text color
+  const [textColor, setTextColor] = useState("white"); r
 
-  // Function to fetch a random meme image from an API
+  // random meme image from an API fuctions
   const fetchMeme = async () => {
     try {
       const response = await fetch("https://api.imgflip.com/get_memes");
       const data = await response.json();
       const memes = data.data.memes;
       const randomMeme = memes[Math.floor(Math.random() * memes.length)];
-      setMeme(randomMeme.url); // Set the random meme image URL
+
+      // random meme image
+      setMeme(randomMeme.url); 
     } catch (error) {
       console.error("Error fetching meme:", error);
     }
   };
 
-  // Form submit handler
+  // Form submit 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetchMeme(); // Fetch new meme when the button is clicked
+    fetchMeme(); 
   };
 
-  // Function to calculate average brightness of the image
+
+  // brightness of the image fuctions 
+
   const calculateImageBrightness = (imageUrl) => {
     const img = new Image();
-    img.crossOrigin = "Anonymous"; // To handle cross-origin images
+    img.crossOrigin = "Anonymous"; 
     img.src = imageUrl;
 
     img.onload = function () {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
 
-      // Set canvas size to image size
+      
+
       canvas.width = img.width;
       canvas.height = img.height;
 
-      // Draw image on the canvas
+      
       ctx.drawImage(img, 0, 0);
 
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -61,16 +66,18 @@ const Form = () => {
       // Calculate average brightness
       const brightness = Math.floor(colorSum / (img.width * img.height));
 
-      // Set text color based on brightness
+
+      
       if (brightness > 127) {
-        setTextColor("black"); // Dark background, light text
+        setTextColor("black"); 
       } else {
-        setTextColor("white"); // Light background, dark text
+        setTextColor("white"); 
       }
     };
   };
 
-  // When the meme image changes, calculate its brightness
+  
+
   useEffect(() => {
     if (meme) {
       calculateImageBrightness(meme);
@@ -89,7 +96,7 @@ const Form = () => {
               type="text"
               id="topText"
               value={topText}
-              onChange={(e) => setTopText(e.target.value)} // Update state for top text
+              onChange={(e) => setTopText(e.target.value)} 
               placeholder="Top text"
               className="border border-gray-600 w-3/4 rounded-md h-8 bg-white placeholder:text-black text-black text-sm p-2 placeholder:text-sm focus:outline-none"
             />
@@ -103,7 +110,7 @@ const Form = () => {
               type="text"
               id="bottomText"
               value={bottomText}
-              onChange={(e) => setBottomText(e.target.value)} // Update state for bottom text
+              onChange={(e) => setBottomText(e.target.value)} 
               placeholder="Bottom Text"
               className="border border-gray-600 w-3/4 rounded-md h-8 bg-white placeholder:text-black text-black text-sm placeholder:text-sm p-2 focus:outline-none"
             />
