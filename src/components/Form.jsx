@@ -4,35 +4,31 @@ const Form = () => {
   const [topText, setTopText] = useState("");
   const [bottomText, setBottomText] = useState("");
   const [meme, setMeme] = useState(null);
-  const [textColor, setTextColor] = useState("white"); r
+  const [textColor, setTextColor] = useState("white");
 
-  // random meme image from an API fuctions
+  // API FETCH
   const fetchMeme = async () => {
     try {
       const response = await fetch("https://api.imgflip.com/get_memes");
       const data = await response.json();
       const memes = data.data.memes;
       const randomMeme = memes[Math.floor(Math.random() * memes.length)];
-
-      // random meme image
       setMeme(randomMeme.url); 
     } catch (error) {
       console.error("Error fetching meme:", error);
     }
   };
 
-  // Form submit 
+ 
   const handleSubmit = (e) => {
     e.preventDefault();
     fetchMeme(); 
   };
 
-
-  // brightness of the image fuctions 
-
+  // calculate average brightness of the image
   const calculateImageBrightness = (imageUrl) => {
     const img = new Image();
-    img.crossOrigin = "Anonymous"; 
+    img.crossOrigin = "Anonymous";
     img.src = imageUrl;
 
     img.onload = function () {
@@ -40,11 +36,10 @@ const Form = () => {
       const ctx = canvas.getContext("2d");
 
       
-
       canvas.width = img.width;
       canvas.height = img.height;
 
-      
+     
       ctx.drawImage(img, 0, 0);
 
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -53,7 +48,7 @@ const Form = () => {
       let r, g, b, avg;
       let colorSum = 0;
 
-      // Loop through all pixels
+      
       for (let i = 0; i < data.length; i += 4) {
         r = data[i];
         g = data[i + 1];
@@ -63,11 +58,10 @@ const Form = () => {
         colorSum += avg;
       }
 
-      // Calculate average brightness
+      
       const brightness = Math.floor(colorSum / (img.width * img.height));
 
-
-      
+      // Set text color based on brightness
       if (brightness > 127) {
         setTextColor("black"); 
       } else {
@@ -76,8 +70,7 @@ const Form = () => {
     };
   };
 
-  
-
+  // When the meme image changes, calculate its brightness
   useEffect(() => {
     if (meme) {
       calculateImageBrightness(meme);
@@ -110,7 +103,7 @@ const Form = () => {
               type="text"
               id="bottomText"
               value={bottomText}
-              onChange={(e) => setBottomText(e.target.value)} 
+              onChange={(e) => setBottomText(e.target.value)}
               placeholder="Bottom Text"
               className="border border-gray-600 w-3/4 rounded-md h-8 bg-white placeholder:text-black text-black text-sm placeholder:text-sm p-2 focus:outline-none"
             />
@@ -119,7 +112,7 @@ const Form = () => {
 
         <div className="flex w-full justify-center items-center mt-8">
           <button className="w-3/4 bg-violet-700 h-10 text-white rounded-lg" type="submit">
-            Get a new Meme Image
+            Click here to Generate your Meme Image
           </button>
         </div>
       </form>
