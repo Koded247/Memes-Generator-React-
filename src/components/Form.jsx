@@ -12,18 +12,20 @@ const Form = () => {
       topText: "Top Text",
       bottomText: "Bottom Text",
       buttonText: "Click here to Generate your Meme Image",
+      downloadText: "Download Meme",
     },
     es: {
       topText: "Texto Superior",
       bottomText: "Texto Inferior",
       buttonText: "Haz clic aquí para generar tu imagen de meme",
+      downloadText: "Descargar Meme",
     },
     fr: {
       topText: "Texte Supérieur",
       bottomText: "Texte Inférieur",
       buttonText: "Cliquez ici pour générer votre image de mème",
+      downloadText: "Télécharger le Mème",
     },
-    // Add more languages as needed
   };
 
   const fetchMeme = async () => {
@@ -78,6 +80,13 @@ const Form = () => {
     };
   };
 
+  const downloadMeme = () => {
+    const link = document.createElement("a");
+    link.href = meme;
+    link.download = "meme.png";
+    link.click();
+  };
+
   useEffect(() => {
     if (meme) {
       calculateImageBrightness(meme);
@@ -85,7 +94,7 @@ const Form = () => {
   }, [meme]);
 
   return (
-    <div className="py-7 bg-white">
+    <div className="py-7 bg-white max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="mb-4 flex justify-center">
         <label htmlFor="language" className="mr-2">Select Language:</label>
         <select
@@ -101,8 +110,8 @@ const Form = () => {
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div className="flex">
-          <div className="flex flex-col w-1/2 items-center">
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <div className="flex flex-col w-full sm:w-1/2 items-center">
             <label htmlFor="topText" className="text-sm font-medium self-start ml-20 hidden md:flex">
               {languages[language].topText}
             </label>
@@ -112,11 +121,11 @@ const Form = () => {
               value={topText}
               onChange={(e) => setTopText(e.target.value)}
               placeholder={languages[language].topText}
-              className="border border-gray-600 w-3/4 rounded-md h-8 bg-white placeholder:text-black text-black text-sm p-2 placeholder:text-sm focus:outline-none"
+              className="border border-gray-600 w-full sm:w-3/4 rounded-md h-8 bg-white placeholder:text-black text-black text-sm p-2 placeholder:text-sm focus:outline-none"
             />
           </div>
 
-          <div className="flex flex-col w-1/2 items-center">
+          <div className="flex flex-col w-full sm:w-1/2 items-center">
             <label htmlFor="bottomText" className="text-sm font-medium hidden md:flex self-start ml-20">
               {languages[language].bottomText}
             </label>
@@ -126,32 +135,57 @@ const Form = () => {
               value={bottomText}
               onChange={(e) => setBottomText(e.target.value)}
               placeholder={languages[language].bottomText}
-              className="border border-gray-600 w-3/4 rounded-md h-8 bg-white placeholder:text-black text-black text-sm placeholder:text-sm p-2 focus:outline-none"
+              className="border border-gray-600 w-full sm:w-3/4 rounded-md h-8 bg-white placeholder:text-black text-black text-sm placeholder:text-sm p-2 focus:outline-none"
             />
           </div>
         </div>
 
         <div className="flex w-full justify-center items-center mt-8">
-          <button className="w-2/4 bg-violet-700 h-10 text-white rounded-full" type="submit">
+          <button className="w-full sm:w-2/4 bg-violet-700 h-10 text-white rounded-full" type="submit">
             {languages[language].buttonText}
           </button>
         </div>
       </form>
 
       {meme && (
-        <div className="relative mt-8 w-full max-w-md mx-auto">
-          <img src={meme} alt="Meme" className="w-full h-auto" />
-          <div
-            className="absolute top-4 left-1/2 transform -translate-x-1/2 text-center drop-shadow-md"
-            style={{ color: textColor, fontWeight: "bold", fontSize: "2em" }}
-          >
-            {topText}
+        <div className="flex flex-col sm:flex-row mt-8 items-start justify-center space-x-4">
+          <div className="relative w-full sm:max-w-md mx-auto">
+            <img src={meme} alt="Meme" className="w-full h-auto" />
+            <div
+              className="absolute top-4 left-1/2 transform -translate-x-1/2 text-center drop-shadow-md"
+              style={{
+                color: textColor,
+                fontWeight: "bold",
+                fontSize: "2em",
+                maxWidth: "90%",
+                wordWrap: "break-word",
+              }}
+            >
+              {topText}
+            </div>
+            <div
+              className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center drop-shadow-md"
+              style={{
+                color: textColor,
+                fontWeight: "bold",
+                fontSize: "2em",
+                maxWidth: "90%",
+                wordWrap: "break-word",
+                whiteSpace: "pre-wrap", 
+                overflowWrap: "break-word", 
+              }}
+            >
+              {bottomText}
+            </div>
           </div>
-          <div
-            className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center drop-shadow-md"
-            style={{ color: textColor, fontWeight: "bold", fontSize: "2em" }}
-          >
-            {bottomText}
+
+          <div className="flex justify-center mt-4 sm:mt-0">
+            <button
+              onClick={downloadMeme}
+              className="bg-purple-600 text-white rounded-full px-6 py-2"
+            >
+              {languages[language].downloadText}
+            </button>
           </div>
         </div>
       )}
