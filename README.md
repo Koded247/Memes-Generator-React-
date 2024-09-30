@@ -31,9 +31,9 @@
 
 ### Screenshot (desktop and mobile view)
 
-![desktop]()
+![desktop](./src/assets/deskTmeme.png)
 
-![mobile]()
+
 
 
 ### Links
